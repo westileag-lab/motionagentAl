@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스마트 모션 관제 에이전트 v3</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { margin: 0; display: flex; flex-direction: column; align-items: center; background-color: #121212; color: white; font-family: sans-serif; }
+        #video-container { position: relative; width: 100%; max-width: 600px; margin-top: 20px; }
+        video, canvas { width: 100%; height: auto; position: absolute; top: 0; left: 0; }
+        video { position: relative; z-index: 1; }
+        canvas { z-index: 2; pointer-events: none; }
+        .controls { position: relative; z-index: 3; margin-top: 20px; text-align: center; width: 100%; max-width: 600px; padding: 15px; background: #222; border-radius: 8px;}
+        button { padding: 10px 15px; margin: 5px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; border-radius: 5px; background-color: #555; color: white; }
+        button.active { background-color: #4CAF50; }
+        .status-box { margin-top: 15px; padding: 10px; background: #333; border-radius: 5px; font-size: 14px; }
+        #registered-color-preview { display: inline-block; width: 20px; height: 20px; border: 1px solid #fff; vertical-align: middle; margin-left: 10px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h2>다중 모션 관제 에이전트</h2>
+    <div id="video-container">
+        <video id="webcam" autoplay playsinline muted></video>
+        <canvas id="output-canvas"></canvas>
+    </div>
+    <div class="controls">
+        <div id="mode-selector">
+            <button id="btn-mode1" class="active" onclick="setMode(1)">1. 실내 (색 등록)</button>
+            <button id="btn-mode2" onclick="setMode(2)">2. 야간 (흰 차량+TG)</button>
+            <button id="btn-mode3" onclick="setMode(3)">3. 복합 (차량털이범)</button>
+        </div>
+        <button id="register-btn" style="margin-top:10px; width:100%; background-color:#2196F3;">타겟 복장 색 등록 (1번 모드용)</button>
+        <div class="status-box">
+            상태: <span id="status-text">모델 로딩 중...</span><br>
+            기준 색상: <span id="registered-color-preview"></span>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+    </script>
+</body>
+</html>
